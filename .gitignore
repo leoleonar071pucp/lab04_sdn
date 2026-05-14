@@ -1,0 +1,4 @@
+__pycache__/
+*.pyc
+_docx_render/
+_docx_pages/

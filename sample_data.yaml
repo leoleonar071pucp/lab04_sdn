@@ -1,0 +1,45 @@
+alumnos:
+  - nombre: Juan Perez
+    codigo: 20012482
+    mac: "00:44:11:22:44:A7"
+  - nombre: John Smith
+    codigo: 20041321
+    mac: "00:44:11:2F:33:D8"
+  - nombre: Luisa Marvel
+    codigo: 20080621
+    mac: "00:44:11:3F:22:C3"
+
+cursos:
+  - codigo: TEL354
+    estado: DICTANDO
+    nombre: Redes Definidas por Software
+    alumnos:
+      - 20012482
+      - 20041321
+    servidores:
+      - nombre: Servidor 1
+        servicios_permitidos:
+          - ssh
+          - web
+  - codigo: TEL123
+    estado: INACTIVO
+    nombre: Telepathy and Telekinetics
+    alumnos:
+      - 20080621
+      - 20041321
+    servidores:
+      - nombre: Servidor 1
+        servicios_permitidos:
+          - web
+
+servidores:
+  - nombre: Servidor 1
+    ip: 10.0.0.3
+    mac: "00:00:00:00:00:03"
+    servicios:
+      - nombre: ssh
+        protocolo: TCP
+        puerto: 22
+      - nombre: web
+        protocolo: TCP
+        puerto: 80

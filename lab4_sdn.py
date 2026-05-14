@@ -659,6 +659,7 @@ class Lab4SDNApp:
                 "ip_proto": protocol_value,
                 reverse_transport_field: str(servicio.puerto),
                 "active": "true",
+                "in_port": str(out_port),
                 "actions": f"output={in_port}",
             }
             arp_fwd_flow = {
@@ -680,6 +681,7 @@ class Lab4SDNApp:
                 "eth_type": "0x0806",
                 "eth_dst": alumno.mac,
                 "active": "true",
+                "in_port": str(out_port),
                 "actions": f"output={in_port}",
             }
 

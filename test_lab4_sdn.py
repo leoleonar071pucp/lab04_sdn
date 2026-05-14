@@ -55,6 +55,21 @@ class Lab4SDNTests(unittest.TestCase):
         self.assertEqual(warnings, [])
         self.assertEqual(self.controller.deleted, conexion.flow_names)
 
+    def test_reverse_flows_use_inverse_ports(self):
+        self.app.create_connection("20012482", "Servidor 1", "ssh")
+        reverse_flows = [flow for flow in self.controller.pushed if "_rev_" in flow["name"] and "arp" not in flow["name"]]
+        reverse_arp_flows = [flow for flow in self.controller.pushed if "_arp_rev_" in flow["name"]]
+
+        self.assertEqual(reverse_flows[0]["in_port"], "3")
+        self.assertEqual(reverse_flows[0]["actions"], "output=1")
+        self.assertEqual(reverse_flows[1]["in_port"], "2")
+        self.assertEqual(reverse_flows[1]["actions"], "output=4")
+
+        self.assertEqual(reverse_arp_flows[0]["in_port"], "3")
+        self.assertEqual(reverse_arp_flows[0]["actions"], "output=1")
+        self.assertEqual(reverse_arp_flows[1]["in_port"], "2")
+        self.assertEqual(reverse_arp_flows[1]["actions"], "output=4")
+
     def test_add_missing_student_rejected(self):
         with self.assertRaisesRegex(ValueError, "not found"):
             self.app.add_alumno_to_curso("TEL354", "99999999")

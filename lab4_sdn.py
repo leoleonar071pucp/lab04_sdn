@@ -1,9 +1,6 @@
-from __future__ import annotations
-
 import argparse
 import json
 import sys
-from dataclasses import dataclass, field
 from pathlib import Path
 from typing import Any, Dict, Iterable, List, Optional, Tuple
 
@@ -193,51 +190,66 @@ def dump_yaml(data: Any, indent: int = 0) -> str:
     return f"{spaces}{yaml_scalar(data)}"
 
 
-@dataclass
 class Alumno:
-    codigo: str
-    nombre: str
-    mac: str
+    def __init__(self, codigo: str, nombre: str, mac: str):
+        self.codigo = codigo
+        self.nombre = nombre
+        self.mac = mac
 
 
-@dataclass
 class Servicio:
-    nombre: str
-    protocolo: str
-    puerto: int
+    def __init__(self, nombre: str, protocolo: str, puerto: int):
+        self.nombre = nombre
+        self.protocolo = protocolo
+        self.puerto = puerto
 
 
-@dataclass
 class Servidor:
-    nombre: str
-    ip: str
-    mac: Optional[str] = None
-    servicios: Dict[str, Servicio] = field(default_factory=dict)
+    def __init__(self, nombre: str, ip: str, mac: Optional[str] = None, servicios: Optional[Dict[str, "Servicio"]] = None):
+        self.nombre = nombre
+        self.ip = ip
+        self.mac = mac
+        self.servicios = servicios or {}
 
 
-@dataclass
 class CursoServidorPermitido:
-    nombre: str
-    servicios_permitidos: List[str] = field(default_factory=list)
+    def __init__(self, nombre: str, servicios_permitidos: Optional[List[str]] = None):
+        self.nombre = nombre
+        self.servicios_permitidos = servicios_permitidos or []
 
 
-@dataclass
 class Curso:
-    codigo: str
-    nombre: str
-    estado: str
-    alumnos: List[str] = field(default_factory=list)
-    servidores_permitidos: Dict[str, CursoServidorPermitido] = field(default_factory=dict)
+    def __init__(
+        self,
+        codigo: str,
+        nombre: str,
+        estado: str,
+        alumnos: Optional[List[str]] = None,
+        servidores_permitidos: Optional[Dict[str, "CursoServidorPermitido"]] = None,
+    ):
+        self.codigo = codigo
+        self.nombre = nombre
+        self.estado = estado
+        self.alumnos = alumnos or []
+        self.servidores_permitidos = servidores_permitidos or {}
 
 
-@dataclass
 class Conexion:
-    handler: str
-    codigo_alumno: str
-    nombre_servidor: str
-    nombre_servicio: str
-    ruta: List[Dict[str, Any]]
-    flow_names: List[str]
+    def __init__(
+        self,
+        handler: str,
+        codigo_alumno: str,
+        nombre_servidor: str,
+        nombre_servicio: str,
+        ruta: List[Dict[str, Any]],
+        flow_names: List[str],
+    ):
+        self.handler = handler
+        self.codigo_alumno = codigo_alumno
+        self.nombre_servidor = nombre_servidor
+        self.nombre_servicio = nombre_servicio
+        self.ruta = ruta
+        self.flow_names = flow_names
 
 
 class FloodlightClient:

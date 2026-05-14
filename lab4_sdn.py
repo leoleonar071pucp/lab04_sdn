@@ -638,8 +638,6 @@ class Lab4SDNApp:
                 "eth_type": "0x0800",
                 "eth_src": alumno.mac,
                 "eth_dst": servidor.mac or "",
-                "ipv4_src": "0.0.0.0/0",
-                "ipv4_dst": servidor.ip,
                 "ip_proto": protocol_value,
                 transport_field: str(servicio.puerto),
                 "active": "true",
@@ -654,8 +652,6 @@ class Lab4SDNApp:
                 "eth_type": "0x0800",
                 "eth_src": servidor.mac or "",
                 "eth_dst": alumno.mac,
-                "ipv4_src": servidor.ip,
-                "ipv4_dst": "0.0.0.0/0",
                 "ip_proto": protocol_value,
                 reverse_transport_field: str(servicio.puerto),
                 "active": "true",
@@ -693,6 +689,15 @@ class Lab4SDNApp:
         return flow_names
 
     @staticmethod
+    def _extract_port_value(raw_port: Any) -> str:
+        if isinstance(raw_port, dict):
+            if "shortPortNumber" in raw_port:
+                return str(raw_port["shortPortNumber"])
+            if "portNumber" in raw_port:
+                return str(raw_port["portNumber"])
+        return str(raw_port)
+
+    @staticmethod
     def _route_to_segments(route: List[Dict[str, Any]]) -> List[Dict[str, Any]]:
         segments = []
         for idx in range(0, len(route), 2):
@@ -701,8 +706,8 @@ class Lab4SDNApp:
             segments.append(
                 {
                     "switch": ingress.get("switch") or ingress.get("switchDPID"),
-                    "in_port": ingress.get("port"),
-                    "out_port": egress.get("port"),
+                    "in_port": Lab4SDNApp._extract_port_value(ingress.get("port")),
+                    "out_port": Lab4SDNApp._extract_port_value(egress.get("port")),
                 }
             )
         return segments

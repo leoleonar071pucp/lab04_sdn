@@ -658,6 +658,7 @@ class Lab4SDNApp:
                 "in_port": str(out_port),
                 "actions": f"output={in_port}",
             }
+
             arp_fwd_flow = {
                 "switch": dpid,
                 "name": arp_fwd_name,
@@ -665,22 +666,25 @@ class Lab4SDNApp:
                 "priority": "32767",
                 "eth_type": "0x0806",
                 "eth_src": alumno.mac,
+                "eth_dst": "ff:ff:ff:ff:ff:ff",  # ARP request: broadcast como el jp dijo para que le envie a todos y tmb de paso le llegue al controller
                 "active": "true",
                 "in_port": str(in_port),
                 "actions": f"output={out_port}",
             }
+            
             arp_rev_flow = {
                 "switch": dpid,
                 "name": arp_rev_name,
                 "cookie": "0",
                 "priority": "32767",
                 "eth_type": "0x0806",
-                "eth_dst": alumno.mac,
+                "eth_dst": alumno.mac,  # ARP reply: unicast hacia el alumno 
                 "active": "true",
                 "in_port": str(out_port),
                 "actions": f"output={in_port}",
             }
 
+            
             for flow in (fwd_flow, rev_flow, arp_fwd_flow, arp_rev_flow):
                 flow = {key: value for key, value in flow.items() if value != ""}
                 self.controller.push_flow(flow)
